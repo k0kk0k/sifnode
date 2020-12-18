@@ -144,8 +144,20 @@ def basic_happy_path_scenario_1():
     _amount = 100
     _dai_symbol = "dai"
     _sifchain_user = USER
+
+    user_balance_before_tx = get_sifchain_balance(
+        _sifchain_user, 
+        _dai_symbol,
+        _network_password)
     
     send_eth_lock(_sifchain_user, _dai_symbol, _amount)
+
+    assert wait_for_sifchain_balance(
+        _sifchain_user, 
+        _dai_symbol, 
+        _network_password, 
+        user_balance_before_tx + _amount
+        ), "Basic Happy Path Scenario One Failed: Incorrect Sifchain Balance"
 
     print("########## Basic Happy Path Scenario One Over ##########")
 
@@ -180,14 +192,14 @@ def basic_happy_path_scenario_2():
         _bridge_bank_address, 
         _eth_symbol, 
         bridge_bank_balance_before_tx + _amount
-        ), "Basic Happy Path Scenario 2 Failed: Incorrect Eth Balance"
+        ), "Basic Happy Path Scenario Two Failed: Incorrect Eth Balance"
 
     assert wait_for_sifchain_balance(
         _sifchain_user, 
         _sif_eth_symbol, 
         _network_password, 
         user_balance_before_tx + _amount
-        ), "Basic Happy Path Scenario 2 Failed: Incorrect Sifchain Balance"
+        ), "Basic Happy Path Scenario Two Failed: Incorrect Sifchain Balance"
 
     print("########## Basic Happy Path Scenario Two Over ##########")
 

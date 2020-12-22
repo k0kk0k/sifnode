@@ -6,3 +6,9 @@ set -e # exit on any failure
 # add 18 zeros to a number
 to_wei () { echo "${1}000000000000000000" ; }
 to_json () { ruby -ryaml -rjson -e "puts YAML::load(STDIN.read).to_json"; }
+
+# sets an environment variable and writes it to
+set_persistant_env_var () {
+  export $1=$2
+  echo "export $1=$2" >> $3
+}

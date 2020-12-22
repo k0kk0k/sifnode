@@ -30,11 +30,10 @@ services:
 
     entrypoint: /test/integration/integration-entrypoint.sh ${ADD_VALIDATOR_TO_WHITELIST}
     networks:
-      genesis_sifchain:
-        ipv4_address: ${IPV4_ADDRESS1}
+      sifchain_integration:
 
 networks:
-  genesis_sifchain:
+  sifchain_integration:
     external: true
 
 volumes:

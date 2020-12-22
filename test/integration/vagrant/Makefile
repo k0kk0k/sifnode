@@ -24,9 +24,20 @@ all:
 	vagrant ssh -c "docker rmi -f integration_sifnode1:latest"
 	touch $@
 
+.PHONY: integrationenv
+integrationenv: .depend/setup .depend/dockerrmi data
+	vagrant ssh -c "cd ${BASEDIR} && bash -x test/integration/start-integration-env.sh" 2>&1 | tee data/start-integration-env.txt
+
+.PHONY: test-whitelistedvalidators
+test-whitelistedvalidators: integrationenv
+	vagrant ssh -c "cd ${BASEDIR} && bash -x test/integration/execute_integration_tests_whitelisted_validators.sh" 2>&1 | tee data/$@.sh
+
+.PHONY: test-main
+test-main: integrationenv
+	vagrant ssh -c "cd ${BASEDIR} && bash -x test/integration/execute_integration_tests_main.sh" 2>&1 | tee data/$@.sh
+
 .PHONY: test
-test: .depend/setup .depend/dockerrmi data
-	vagrant ssh -c "cd ${BASEDIR} && bash -x test/integration/start-integration-env.sh" 2>&1 | tee data/testrun.sh
+test: test-main
 
 # convenience targets
 

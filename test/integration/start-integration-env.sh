@@ -9,21 +9,17 @@ BASEDIR=$(pwd)/$(dirname $0)/../..
 
 export envexportfile=$BASEDIR/test/integration/vagrantenv.sh
 rm -f $envexportfile
-echo "export envexportfile=$envexportfile" >> $envexportfile
 
-# datadir contains all the telemetry about the run; docker logs, etc
-export datadir=$BASEDIR/test/integration/vagrant/data
-echo "export datadir=$datadir" >> $envexportfile
+set_persistant_env_var envexportfile $envexportfile $envexportfile
+set_persistant_env_var BASEDIR $BASEDIR $envexportfile
+set_persistant_env_var datadir $BASEDIR/test/integration/vagrant/data $envexportfile
+set_persistant_env_var CONTAINER_NAME integration_sifnode1_1 $envexportfile
+set_persistant_env_var NETWORKDIR $BASEDIR/deploy/networks $envexportfile
+set_persistant_env_var GANACHE_DB_DIR $(mktemp -d --tmpdir ganachedb.XXXX) $envexportfile
 
-bash $BASEDIR/test/integration/start_watchers.sh
-
-export CONTAINER_NAME="integration_sifnode1_1"
-echo "export CONTAINER_NAME=$CONTAINER_NAME" >> $envexportfile
-
-echo "export BASEDIR=$BASEDIR" >> $envexportfile
-
-NETWORKDIR=$BASEDIR/deploy/networks
-echo "export NETWORKDIR=$NETWORKDIR" >> $envexportfile
+# Create the docker network
+# (use inspect to see if it exists before creating it again)
+docker network inspect sifchain_integration > /dev/null 2>&1 || docker network create sifchain_integration
 
 #
 # Remove prior generations Config
@@ -79,20 +75,3 @@ docker exec ${CONTAINER_NAME} bash -c "/test/integration/add-second-account.sh"
 
 export USER1ADDR=$(cat $NETDEF | yq r - "[1].address")
 echo "export USER1ADDR=$USER1ADDR" >> $envexportfile
-
-#
-# Run the python tests
-#
-echo run python tests
-
-docker exec ${CONTAINER_NAME} bash -c ". /test/integration/vagrantenv.sh; cd /sifnode; SMART_CONTRACTS_DIR=/smart-contracts python3 /test/integration/initial_test_balances.py /network-definition.yml"
-sleep 15
-docker exec ${CONTAINER_NAME} bash -c ". /test/integration/vagrantenv.sh; cd /sifnode; SMART_CONTRACTS_DIR=/smart-contracts python3 /test/integration/peggy-basic-test-docker.py /network-definition.yml"
-docker exec ${CONTAINER_NAME} bash -c '. /test/integration/vagrantenv.sh; cd /sifnode; SMART_CONTRACTS_DIR=/smart-contracts python3 /test/integration/peggy-e2e-test.py /network-definition.yml'
-
-# Rebuild sifchain, but this time don't use validators
-
-sudo rm -rf $NETWORKDIR && mkdir $NETWORKDIR
-ADD_VALIDATOR_TO_WHITELIST= bash ${BASEDIR}/test/integration/setup_sifchain.sh && . $envexportfile
-
-docker exec ${CONTAINER_NAME} bash -c ". /test/integration/vagrantenv.sh; cd /sifnode; SMART_CONTRACTS_DIR=/smart-contracts python3 /test/integration/no_whitelisted_validators.py /network-definition.yml"

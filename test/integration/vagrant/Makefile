@@ -54,7 +54,7 @@ clean:
 
 pulldata: data
 	vagrant ssh -c "bash /sifnode/test/integration/assemble_data.sh"
-	tar cfv datafiles.tar data/*
+	tar cf datafiles.tar data/*
 	cp datafiles.tar datafiles.$(shell date +%m-%d-%H-%M-%S).tar
 	
 cmds:

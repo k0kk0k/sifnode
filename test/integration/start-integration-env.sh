@@ -41,6 +41,7 @@ yarn --cwd $BASEDIR/smart-contracts install
 export YARN_CACHE_DIR=$(yarn cache dir)
 echo "export YARN_CACHE_DIR=$YARN_CACHE_DIR" >> $envexportfile
 
+# Uses GANACHE_DB_DIR for the --db argument to the chain
 docker-compose --project-name genesis -f ${TEST_INTEGRATION_DIR}/docker-compose-ganache.yml up -d --force-recreate
 
 # https://www.trufflesuite.com/docs/truffle/overview

@@ -36,6 +36,7 @@ cd_smart_contracts_dir = f"cd {smart_contracts_dir}; "
 moniker = get_required_env_var("MONIKER")
 owner_addr = get_required_env_var("OWNER_ADDR")
 user1_addr = get_required_env_var("USER1ADDR")
+test_integration_dir = get_required_env_var("TEST_INTEGRATION_DIR")
 
 
 def test_log_line(s):

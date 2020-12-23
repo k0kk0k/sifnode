@@ -4,7 +4,7 @@ set -x
 set -e
 
 . $(dirname $0)/vagrantenv.sh
-. ${BASEDIR}/test/integration/shell_utilities.sh
+. ${TEST_INTEGRATION_DIR}/shell_utilities.sh
 
 #
 # scaffold and boot the dockerized localnet
@@ -28,18 +28,12 @@ docker exec ${CONTAINER_NAME} bash -c "bash /test/integration/start-ganache-port
 # those rake commands generate yaml that provides useful usernames and passwords
 # wait for it to appear
 
-NETDEF=$NETWORKDIR/network-definition.yml
-echo "export NETDEF=$NETDEF" >> $envexportfile
-while [ ! -f $NETWORKDIR/network-definition.yml ]
+set_persistant_env_var NETDEF $NETWORKDIR/network-definition.yml $envexportfile
+while [ ! -f $NETDEF ]
 do
   sleep 2
 done
 
-export MONIKER=$(cat ${NETWORKDIR}/network-definition.yml | to_json | jq '.[0].moniker')
-echo "export MONIKER=$MONIKER" >> $envexportfile
-
-OWNER_PASSWORD=$(cat $NETDEF | yq r - ".password")
-echo "export OWNER_PASSWORD=$OWNER_PASSWORD" >> $envexportfile
-
-OWNER_ADDR=$(cat $NETDEF | yq r - ".address")
-echo "export OWNER_ADDR=$OWNER_ADDR" >> $envexportfile
+set_persistant_env_var MONIKER $(cat ${NETWORKDIR}/network-definition.yml | to_json | jq '.[0].moniker') $envexportfile
+set_persistant_env_var OWNER_PASSWORD $(cat $NETDEF | yq r - ".password") $envexportfile
+set_persistant_env_var OWNER_ADDR $(cat $NETDEF | yq r - ".address") $envexportfile

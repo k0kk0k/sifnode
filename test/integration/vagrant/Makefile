@@ -1,5 +1,7 @@
 # default to running tests
 
+SHELL=/bin/bash -o pipefail
+
 # where to mount the sifnode tree
 BASEDIR=/sifnode
 

@@ -11,5 +11,4 @@ cat /sifnode/smart-contracts/.env > ${datadir}/env
 cat /sifnode/test/integration/vagrantenv.sh > ${datadir}/vagrantenv.sh
 touch /tmp/bridgebank.txt && cat /tmp/bridgebank.txt > ${datadir}/bridgebank.txt
 ( cd /sifnode/smart-contracts && truffle networks ) > ${datadir}/trufflenetworks.txt
-sudo rsync -a $GANACHE_DB_DIR/ ${datadir}/ganachedb/
-chown -R $(id -u) ${datadir}/ganachedb/
+sudo rsync -a $GANACHE_DB_DIR/ ${datadir}/ganachedb/ && chown -R $(id -u) ${datadir}/ganachedb/

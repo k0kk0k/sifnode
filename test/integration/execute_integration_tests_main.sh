@@ -4,9 +4,12 @@ set -x
 set -e
 
 . $(dirname $0)/vagrantenv.sh
-. ${BASEDIR}/test/integration/shell_utilities.sh
+. $(dirname $0)/shell_utilities.sh
 
-docker exec ${CONTAINER_NAME} bash -c ". /test/integration/vagrantenv.sh; cd /sifnode; SMART_CONTRACTS_DIR=/smart-contracts python3 /test/integration/initial_test_balances.py /network-definition.yml"
+logecho $0 starting
+
+python3 $TEST_INTEGRATION_DIR/initial_test_balances.py $NETDEF
+logecho $0 completed $TEST_INTEGRATION_DIR/initial_test_balances.py
 sleep 15
-docker exec ${CONTAINER_NAME} bash -c ". /test/integration/vagrantenv.sh; cd /sifnode; SMART_CONTRACTS_DIR=/smart-contracts python3 /test/integration/peggy-basic-test-docker.py /network-definition.yml"
-docker exec ${CONTAINER_NAME} bash -c '. /test/integration/vagrantenv.sh; cd /sifnode; SMART_CONTRACTS_DIR=/smart-contracts python3 /test/integration/peggy-e2e-test.py /network-definition.yml'
+python3 $TEST_INTEGRATION_DIR/peggy-basic-test-docker.py $NETDEF
+python3 $TEST_INTEGRATION_DIR/peggy-e2e-test.py $NETDEF

@@ -16,6 +16,7 @@ set_persistant_env_var BASEDIR $(fullpath $BASEDIR) $envexportfile
 set_persistant_env_var SIFCHAIN_BIN $BASEDIR/cmd $envexportfile
 set_persistant_env_var envexportfile $(fullpath $envexportfile) $envexportfile
 set_persistant_env_var TEST_INTEGRATION_DIR ${BASEDIR}/test/integration $envexportfile
+set_persistant_env_var SMART_CONTRACTS_DIR ${BASEDIR}/smart-contracts $envexportfile
 set_persistant_env_var datadir ${TEST_INTEGRATION_DIR}/vagrant/data $envexportfile
 set_persistant_env_var CONTAINER_NAME integration_sifnode1_1 $envexportfile
 set_persistant_env_var NETWORKDIR $BASEDIR/deploy/networks $envexportfile
@@ -70,11 +71,8 @@ ln -s $CHAINDIR/.sifnodecli ~
 #
 #docker exec ${CONTAINER_NAME} bash -c "/test/integration/add-second-account.sh"
 
-echo sifnodecli keys add user1
 yes $OWNER_PASSWORD | sifnodecli keys add user1 || true
-echo sifnodecli keys show user1
 yes $OWNER_PASSWORD | sifnodecli keys show user1 >> $NETDEF || true
-echo setuser1
 set_persistant_env_var USER1ADDR $(cat $NETDEF | yq r - "[1].address") $envexportfile
 
-echo donedone
+logecho finished $0

@@ -1,28 +1,28 @@
-#!/bin/sh
+#!/bin/bash
+
 #
 # Sifnode entrypoint.
 #
 
 set -x
 
-ADD_VALIDATOR_TO_WHITELIST=$1
-shift
+. /sifnode/test/integration/vagrantenv.sh
 
-NETDEF=/network-definition.yml
-PASSWORD=$(cat $NETDEF | yq r - ".password")
+ADD_VALIDATOR_TO_WHITELIST=${1:-${ADD_VALIDATOR_TO_WHITELIST}}
+shift
 
 if [ -z "${ADD_VALIDATOR_TO_WHITELIST}" ]
 then
   # no whitelist validator requested; mostly useful for testing validator whitelisting
   echo $0: no whitelisted validators
 else
-  whitelisted_validator=$(yes $PASSWORD | sifnodecli keys show -a --bech val $MONIKER)
+  whitelisted_validator=$(yes $OWNER_PASSWORD | sifnodecli keys show -a --bech val $MONIKER --home $CHAINDIR/.sifnodecli)
   echo $0: whitelisted validator $whitelisted_validator
-  sifnoded add-genesis-validators $whitelisted_validator
+  sifnoded add-genesis-validators $whitelisted_validator --home $CHAINDIR/.sifnoded
 fi
 
 start_daemon() {
-  sifnoded start --rpc.laddr tcp://0.0.0.0:26657
+  sifnoded start --rpc.laddr tcp://0.0.0.0:26657 --home $CHAINDIR/.sifnoded
 }
 
 #

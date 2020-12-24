@@ -18,7 +18,7 @@ services:
       MNEMONIC: ${MNEMONIC1}
       ETHEREUM_PRIVATE_KEY: ${ETHEREUM_PRIVATE_KEY1}
       RELAYER_ENABLED: "true"
-      YARN_CACHE_DIR: ${YARN_CACHE_DIR}
+      DOCKER_YARN_CACHE: ${DOCKER_YARN_CACHE}
     volumes:
       - ${BASEDIR}/deploy/networks/validators/${CHAINNET}/${MONIKER1}:/root:Z
       - ${BASEDIR}/scripts:/scripts
@@ -26,15 +26,12 @@ services:
       - ${BASEDIR}/deploy/networks/network-definition.yml:/network-definition.yml
       - ${BASEDIR}/smart-contracts:/smart-contracts
       - ${BASEDIR}:/sifnode
-      - yarncache:/yarncache
+      - ${DOCKER_YARN_CACHE}:/yarncache
 
-    entrypoint: /test/integration/integration-entrypoint.sh ${ADD_VALIDATOR_TO_WHITELIST}
+    entrypoint: tail -f /dev/null
     networks:
       sifchain_integration:
 
 networks:
   sifchain_integration:
     external: true
-
-volumes:
-  yarncache:

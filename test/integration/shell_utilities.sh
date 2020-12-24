@@ -15,5 +15,5 @@ set_persistant_env_var () {
     exit 1
   fi
   export $1=$2
-  echo "export $1=$2" >> $3
+  echo "export $1=\"$2\"" >> $3
 }

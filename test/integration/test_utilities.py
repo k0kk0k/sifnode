@@ -11,7 +11,6 @@ SIF_ROWAN = "rowan"
 ETHEREUM_ROWAN = "erowan"
 
 verbose = False
-persistantLog = open("/tmp/testrun.sh", "a")
 n_wait_blocks = 50  # number of blocks to wait for the relayer to act
 
 
@@ -36,6 +35,10 @@ cd_smart_contracts_dir = f"cd {smart_contracts_dir}; "
 moniker = get_required_env_var("MONIKER")
 owner_addr = get_required_env_var("OWNER_ADDR")
 user1_addr = get_required_env_var("USER1ADDR")
+test_integration_dir = get_required_env_var("TEST_INTEGRATION_DIR")
+datadir = get_required_env_var("datadir")
+
+persistantLog = open(f"{datadir}/python_commands.txt", "a")
 
 
 def test_log_line(s):

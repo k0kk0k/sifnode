@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#
+# Sifnode entrypoint.
+#
+
+set -x
+
+. /sifnode/test/integration/vagrantenv.sh
+
+#
+# Wait for the RPC port to be active.
+#
+wait_for_rpc() {
+  while ! nc -z localhost 26657; do
+    sleep 15
+  done
+}
+
+wait_for_rpc
+echo ETHEREUM_WEBSOCKET_ADDRESS $ETHEREUM_WEBSOCKET_ADDRESS
+echo ETHEREUM_CONTRACT_ADDRESS $ETHEREUM_CONTRACT_ADDRESS
+echo MONIKER $MONIKER
+echo MNEMONIC $MNEMONIC
+ebrelayer init tcp://0.0.0.0:26657 "$ETHEREUM_WEBSOCKET_ADDRESS" \
+                                           "$ETHEREUM_CONTRACT_ADDRESS" \
+                                           "$MONIKER" \
+                                           "$MNEMONIC" \
+                                           --chain-id "$CHAINNET" \
+                                           --gas 300000 \
+                                           --gas-adjustment 1.5 \
+                                            --home $CHAINDIR/.sifnodecli

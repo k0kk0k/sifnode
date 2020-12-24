@@ -55,19 +55,26 @@ truffle deploy --network develop --reset
 # ETHEREUM_CONTRACT_ADDRESS is used for the BridgeRegistry address in many places, so we
 # set it and BRIDGE_REGISTRY_ADDRESS to the same value
 echo "# BRIDGE_REGISTRY_ADDRESS and ETHEREUM_CONTRACT_ADDRESS are synonyms">> $envexportfile
-set_persistant_env_var BRIDGE_REGISTRY_ADDRESS $(cat $BASEDIR/smart-contracts/build/contracts/BridgeRegistry.json | jq '.networks["5777"].address') $envexportfile required
+set_persistant_env_var BRIDGE_REGISTRY_ADDRESS $(cat $BASEDIR/smart-contracts/build/contracts/BridgeRegistry.json | jq -r '.networks["5777"].address') $envexportfile required
 set_persistant_env_var ETHEREUM_CONTRACT_ADDRESS $BRIDGE_REGISTRY_ADDRESS $envexportfile required
 
-set_persistant_env_var BRIDGE_BANK_ADDRESS $(cat $BASEDIR/smart-contracts/build/contracts/BridgeBank.json | jq '.networks["5777"].address') $envexportfile required
-
-#set_persistant_env_var DOCKER_YARN_CACHE $(mktemp -d --tmpdir dockeryarncache.XXXX) $envexportfile
-
-#rsync -a --delete $YARN_CACHE_DIR/ $DOCKER_YARN_CACHE/
+set_persistant_env_var BRIDGE_BANK_ADDRESS $(cat $BASEDIR/smart-contracts/build/contracts/BridgeBank.json | jq -r '.networks["5777"].address') $envexportfile required
 
 ADD_VALIDATOR_TO_WHITELIST=true bash ${BASEDIR}/test/integration/setup_sifchain.sh && . $envexportfile
+
+rm -rf ~/.sifnodecli
+ln -s $CHAINDIR/.sifnodecli ~
 
 #
 # Add keys for a second account to test functions against
 #
 #docker exec ${CONTAINER_NAME} bash -c "/test/integration/add-second-account.sh"
-#set_persistant_env_var USER1ADDR $(cat $NETDEF | yq r - "[1].address") $envexportfile
+
+echo sifnodecli keys add user1
+yes $OWNER_PASSWORD | sifnodecli keys add user1 || true
+echo sifnodecli keys show user1
+yes $OWNER_PASSWORD | sifnodecli keys show user1 >> $NETDEF || true
+echo setuser1
+set_persistant_env_var USER1ADDR $(cat $NETDEF | yq r - "[1].address") $envexportfile
+
+echo donedone

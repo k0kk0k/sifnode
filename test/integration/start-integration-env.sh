@@ -31,7 +31,7 @@ docker network inspect sifchain_integration > /dev/null 2>&1 || docker network c
 #
 # Remove prior generations Config
 #
-find deploy/networks/ -type d | xargs chmod +w
+find $NETWORKDIR -type d | xargs chmod +w
 rm -rf $NETWORKDIR && mkdir $NETWORKDIR
 #rm -rf ${BASEDIR}/smart-contracts/build ${BASEDIR}/smart-contracts/.openzeppelin
 make -C ${BASEDIR} install

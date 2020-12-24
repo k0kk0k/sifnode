@@ -11,6 +11,7 @@ logecho () {
   date=$(date +I\[%Y-%m-%d\|%H:%M:%S.%N\])
   echo $date $*
 }
+filenamedate () { date +%Y-%m-%d-%H-%M-%S-%N; }
 # sets an environment variable and writes it to the file
 set_persistant_env_var () {
   if [[ "$4" = 'required' && -z "$2" ]]; then

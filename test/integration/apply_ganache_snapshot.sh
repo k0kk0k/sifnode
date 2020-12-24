@@ -14,7 +14,7 @@ shift
 set_persistant_env_var GANACHE_DB_DIR $SNAPSHOT_DB_DIR $envexportfile
 
 # save the previous ganache log
-docker logs -t genesis_ganachecli_1 > ${datadir}/ganachelog.txt.$(date +%N) 2>&1
+docker logs -t genesis_ganachecli_1 > ${datadir}/ganachelog.txt.$(filenamedate) 2>&1
 
 logecho $0 restart ganache with snapshot
 

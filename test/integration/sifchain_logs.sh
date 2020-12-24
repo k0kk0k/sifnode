@@ -5,11 +5,12 @@ set -e
 basedir=$(dirname $0)
 . $basedir/vagrantenv.sh
 
-output=$datadir/sifchaintxs.txt
-rm -f $output
+output=$datadir/sifchaintxs
+rm -f $output*
 
-hashes=$(cat SIFNODED_LOG | grep "^txhash: " | sed -e "s/txhash: //")
+hashes=$(cat $EBRELAYER_LOG | grep "^txhash: " | sed -e "s/txhash: //")
 for i in $hashes
 do
-  sifnodecli q tx $i >> $output
+  sifnodecli q tx $i >> $output.txt
+  sifnodecli q tx $i -o json | jq -c >> $output.json
 done

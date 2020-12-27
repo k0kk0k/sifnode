@@ -6,7 +6,7 @@
 
 set -x
 
-. /sifnode/test/integration/vagrantenv.sh
+. $TEST_INTEGRATION_DIR/vagrantenv.sh
 
 #
 # Wait for the RPC port to be active.

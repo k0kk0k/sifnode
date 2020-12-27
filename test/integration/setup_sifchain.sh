@@ -26,11 +26,11 @@ set_persistant_env_var EBRELAYER_LOG $datadir/logs/ebrelayer.log $envexportfile
 
 rm -f $EBRELAYER_LOG
 mkdir -p $datadir/logs
-nohup $TEST_INTEGRATION_DIR/sifchain_start_daemon.sh > $SIFNODED_LOG 2>&1 &
+nohup $TEST_INTEGRATION_DIR/sifchain_start_daemon.sh < /dev/null > $SIFNODED_LOG 2>&1 &
 set_persistant_env_var SIFNODED_PID $! $envexportfile
-nohup sifnodecli rest-server --laddr tcp://0.0.0.0:1317 > $datadir/logs/restserver.log 2>&1 &
+nohup sifnodecli rest-server --laddr tcp://0.0.0.0:1317 < /dev/null > $datadir/logs/restserver.log 2>&1 &
 set_persistant_env_var REST_SERVER_PID $! $envexportfile
-nohup $TEST_INTEGRATION_DIR/sifchain_start_ebrelayer.sh > $EBRELAYER_LOG 2>&1 &
+nohup $TEST_INTEGRATION_DIR/sifchain_start_ebrelayer.sh < /dev/null > $EBRELAYER_LOG 2>&1 &
 set_persistant_env_var EBRELAYER_PID $! $envexportfile
 
 # Wait for ebrelayer to subscribe
@@ -41,4 +41,4 @@ do
 done
 ls -lh $(dirname $EBRELAYER_LOG)
 tail -n +1 $EBRELAYER_LOG
-#tail -n +1 -f $EBRELAYER_LOG | grep -m 1 "Subscribed"
+tail -n +1 -f $EBRELAYER_LOG | grep -m 1 "Subscribed"

@@ -39,11 +39,11 @@ def test_chain_rollback():
     print("snapshot applied")
 
     transact_ethereum_currency_to_sifchain_addr(user1_addr, ETHEREUM_ETH, amount)
-    send_ethereum_currency_to_sifchain_addr(user1_addr, ETHEREUM_ETH, amount)
     advance_n_ethereum_blocks(n_wait_blocks)
-    # we're trying to prove that this tranaction doesn't happen, so we have to
-    # wait around for a while to see if it does
+
+    # TODO we need to wait for ebrelayer directly
     time.sleep(10)
+    
     print(f"balance after sleep is {get_sifchain_addr_balance(user1_addr, SIF_ETH)}")
     wait_for_sifchain_addr_balance(user1_addr, SIF_ETH, user_balance_before_tx + amount)
 

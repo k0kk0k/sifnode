@@ -165,6 +165,7 @@ def send_eth_lock(sifchain_user, symbol, amount):
     return send_ethereum_currency_to_sifchain_addr(get_user_account(sifchain_user, network_password), symbol, amount)
 
 
+# this does not wait for the transaction to complete
 def send_ethereum_currency_to_sifchain_addr(sif_addr, symbol, amount):
     command_line = f"{cd_smart_contracts_dir} yarn peggy:lock {sif_addr} {symbol} {amount}"
     return get_shell_output(command_line)

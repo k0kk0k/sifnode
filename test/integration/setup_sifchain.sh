@@ -37,7 +37,7 @@ set_persistant_env_var EBRELAYER_PID $! $envexportfile
 
 while [ ! -f $EBRELAYER_LOG ]
 do
-  sleep 1
+  sleep 10
 done
-tail $EBRELAYER_LOG
-tail -n +1 -f $EBRELAYER_LOG | grep -m 1 "Subscribed"
+tail -n +1 $EBRELAYER_LOG
+#tail -n +1 -f $EBRELAYER_LOG | grep -m 1 "Subscribed"

@@ -39,5 +39,6 @@ while [ ! -f $EBRELAYER_LOG ]
 do
   sleep 10
 done
+ls -lh $(dirname $EBRELAYER_LOG)
 tail -n +1 $EBRELAYER_LOG
 #tail -n +1 -f $EBRELAYER_LOG | grep -m 1 "Subscribed"

@@ -15,10 +15,6 @@ n_wait_blocks = 50  # number of blocks to wait for the relayer to act
 
 
 def print_error_message(error_message):
-    print("#################################")
-    print("!!!!Error: ", error_message)
-    print("#################################")
-    traceback.print_stack()
     raise Exception(error_message)
 
 

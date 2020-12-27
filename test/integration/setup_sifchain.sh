@@ -35,4 +35,4 @@ set_persistant_env_var EBRELAYER_PID $! $envexportfile
 
 # Wait for ebrelayer to subscribe
 
-tail -n +1 --retry -f $EBRELAYER_LOG | grep -m 1 "Subscribed"
+tail -n +1 --retry --follow=name -f $EBRELAYER_LOG | grep -m 1 "Subscribed"

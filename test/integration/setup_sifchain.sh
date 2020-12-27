@@ -37,7 +37,7 @@ set_persistant_env_var EBRELAYER_PID $! $envexportfile
 
 while [ ! -f $EBRELAYER_LOG ]
 do
-  sleep 10
+  sleep 30
 done
 ls -lh $(dirname $EBRELAYER_LOG)
 tail -n +1 $EBRELAYER_LOG

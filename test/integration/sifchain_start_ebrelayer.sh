@@ -13,15 +13,19 @@ set -x
 #
 wait_for_rpc() {
   while ! nc -z localhost 26657; do
-    sleep 15
+    sleep 1
   done
 }
 
 wait_for_rpc
+
+USER1ADDR=nothing python3 wait_for_sif_account.py $NETDEF $OWNER_ADDR
+
 echo ETHEREUM_WEBSOCKET_ADDRESS $ETHEREUM_WEBSOCKET_ADDRESS
 echo ETHEREUM_CONTRACT_ADDRESS $ETHEREUM_CONTRACT_ADDRESS
 echo MONIKER $MONIKER
 echo MNEMONIC $MNEMONIC
+
 ebrelayer init tcp://0.0.0.0:26657 "$ETHEREUM_WEBSOCKET_ADDRESS" \
                                            "$ETHEREUM_CONTRACT_ADDRESS" \
                                            "$MONIKER" \

@@ -11,6 +11,17 @@ pkill sifnoded || true
 pkill ebrelayer || true
 
 #
+# Remove prior generations Config
+#
+if [ -d $NETWORKDIR ]
+then
+  # $NETWORKDIR has many directories without write permission, so change those
+  # before deleting it.
+  find $NETWORKDIR -type d | xargs chmod +w
+  rm -rf $NETWORKDIR && mkdir $NETWORKDIR
+fi
+
+#
 # scaffold and boot the dockerized localnet
 #
 BASEDIR=${BASEDIR} rake genesis:network:scaffold['localnet']

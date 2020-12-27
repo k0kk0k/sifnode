@@ -28,16 +28,6 @@ set_persistant_env_var CHAINNET localnet $envexportfile
 # (use inspect to see if it exists before creating it again)
 docker network inspect sifchain_integration > /dev/null 2>&1 || docker network create sifchain_integration
 
-#
-# Remove prior generations Config
-#
-if [ -d $NETWORKDIR ]
-then
-  # $NETWORKDIR has many directories without write permission, so change those
-  # before deleting it.
-  find $NETWORKDIR -type d | xargs chmod +w
-  rm -rf $NETWORKDIR && mkdir $NETWORKDIR
-fi
 #rm -rf ${BASEDIR}/smart-contracts/build ${BASEDIR}/smart-contracts/.openzeppelin
 make -C ${BASEDIR} install
 
